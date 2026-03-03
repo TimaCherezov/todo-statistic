@@ -57,6 +57,25 @@ function processCommand(command) {
                     console.log('wrong command')
             }
             break;
+        case 'date':
+            const inputDate = parseInputDate(com[1]);
+            if (!inputDate) {
+                console.log('wrong date format');
+                break;
+            }
+
+            for (const comment of comments) {
+                const parts = comment.split(';');
+                if (parts.length !== 3) continue;
+
+                const commentDate = new Date(parts[1].trim());
+                if (isNaN(commentDate)) continue;
+
+                if (commentDate > inputDate) {
+                    console.log(comment);
+                }
+            }
+            break;
         default:
             console.log('wrong command');
             break;
@@ -152,5 +171,21 @@ function sortCommentsByDate(comments) {
         ...userDict.get('NO_DATE')
     ];
 }
+function parseInputDate(str) {
+    const parts = str.split('-').map(Number);
 
+    if (parts.length === 1) {
+        return new Date(parts[0], 0, 1);
+    }
+
+    if (parts.length === 2) {
+        return new Date(parts[0], parts[1] - 1, 1);
+    }
+
+    if (parts.length === 3) {
+        return new Date(parts[0], parts[1] - 1, parts[2]);
+    }
+
+    return null;
+}
 // TODO you can do it!
