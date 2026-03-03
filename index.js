@@ -12,17 +12,33 @@ function getFiles() {
 }
 
 function processCommand(command) {
-    switch (command) {
+    const com = command.split(' ');
+    const comments = getAllComments();
+    switch (com[0]) {
         case 'exit':
             process.exit(0);
             break;
         case 'show':
-            comments = getAllComments();
-            debugger;
             for (const comment of comments) {
                 console.log(comment);
             }
             break;
+        case 'important':
+            for (const comment of comments) {
+                if (comment.indexOf('!') !== -1) {
+                    console.log(comment);
+                }
+            }
+            break;
+        case 'user':
+            const userName = com[1].toLowerCase();
+            for (const comment of comments) {
+                if (comment.toLowerCase().indexOf(userName) !== -1) {
+                    console.log(comment);
+                }
+            }
+            break;
+
         default:
             console.log('wrong command');
             break;
